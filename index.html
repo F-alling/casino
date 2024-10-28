@@ -1,6 +1,176 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Spin Casino</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            position: relative;
+            max-width: 500px;
+        }
+        .title {
+            font-size: 3rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        .slot-machine {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .slots {
+            display: flex;
+            justify-content: space-around;
+            font-size: 3rem;
+            overflow: hidden;
+            position: relative;
+        }
+        .slot {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+        }
+        .lever {
+            position: absolute;
+            right: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 80px;
+            background: #ffd700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .lever:hover {
+            transform: translateY(-50%) rotate(15deg);
+        }
+        .lever:active {
+            transform: translateY(-50%) rotate(-15deg);
+        }
+        .message {
+            margin-top: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* Animation for slot spinning */
+        @keyframes spin1 {
+            0% { transform: translateY(0); }
+            30% { transform: translateY(-100px); } /* Move up */
+            35% { transform: translateY(-100px); } /* Hold at the top */
+            35.0001% { transform: translateY(80px); } /* Teleport down below */
+            100% { transform: translateY(0); } /* Return to original */
+        }
+        @keyframes spin2 {
+            0% { transform: translateY(0); }
+            30% { transform: translateY(-110px); }
+            35% { transform: translateY(-110px); }
+            35.001% { transform: translateY(90px); }
+            100% { transform: translateY(0); }
+        }
+        @keyframes spin3 {
+            0% { transform: translateY(0); }
+            30% { transform: translateY(-120px); }
+            31% { transform: translateY(-120px); }
+            35.001% { transform: translateY(100px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
 <body>
-<link rel="stylesheet" href="styles.css">
+    <div class="container">
+        <h1 class="title">Lucky Spin Casino</h1>
+        <div class="slot-machine">
+            <div class="slots">
+                <div class="slot" id="slot1">🍒</div>
+                <div class="slot" id="slot2">🍋</div>
+                <div class="slot" id="slot3">🍉</div>
+            </div>
+            <div class="lever" onclick="spin()"></div>
+        </div>
+        <div class="message" id="message">Pull the lever to try your luck!</div>
+    </div>
+
+    <!-- Sound Effects -->
+    <audio id="spinSound" src="spin.m4a"></audio>
+    <audio id="winSound" src="win.mp3"></audio>
+
+    <script>
+        const slotItems = ["🍒", "🍋", "🍉", "🍇", "⭐", "💎"];
+        let isSpinning = false; // Flag to prevent multiple spins
+        
+        function playSound(soundId) {
+            const sound = document.getElementById(soundId);
+            sound.currentTime = 0; // Reset to start
+            sound.play();
+        }
+
+        function spin() {
+            if (isSpinning) return; // Prevent spin if already spinning
+            isSpinning = true; // Set spinning flag
+
+            playSound('spinSound');
+
+            const slot1 = document.getElementById('slot1');
+            const slot2 = document.getElementById('slot2');
+            const slot3 = document.getElementById('slot3');
+            const message = document.getElementById('message');
+
+            // Apply spinning animations with different heights
+            slot1.style.animation = "spin1 5s linear infinite"; // Faster spin
+            slot2.style.animation = "spin2 5s linear infinite"; // Faster spin
+            slot3.style.animation = "spin3 5s linear infinite"; // Faster spin
+
+            // Stop spinning and display results after 5 seconds
+            setTimeout(() => {
+                slot1.style.animation = "";
+                slot2.style.animation = "";
+                slot3.style.animation = "";
+
+                // Randomize the slots
+                const result1 = slotItems[Math.floor(Math.random() * slotItems.length)];
+                const result2 = slotItems[Math.floor(Math.random() * slotItems.length)];
+                const result3 = slotItems[Math.floor(Math.random() * slotItems.length)];
+
+                slot1.textContent = result1;
+                slot2.textContent = result2;
+                slot3.textContent = result3;
+
+                // Play win sound if all three match
+                if (result1 === result2 && result2 === result3) {
+                    playSound('winSound');
+                    message.textContent = "🎉 Jackpot! You won! 🎉";
+                } else if (result1 === result2 || result2 === result3 || result1 === result3) {
+                    message.textContent = "😊 Close! Two in a row!";
+                } else {
+                    message.textContent = "😢 Better luck next time!";
+                }
+
+                isSpinning = false; // Reset spinning flag
+            }, 14200); // 5 seconds delay
+        }
+    </script>
 </body>
 </html>
