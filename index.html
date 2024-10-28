@@ -2,9 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Having fun at the slots.">
-    <meta name="keywords" content="slots, casino, gamble">
-    <meta name="author" content="falling">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucky Spin Casino</title>
     <style>
@@ -61,14 +58,14 @@
             top: 50%;
             transform: translateY(-50%);
             width: 20px;
-            height: 80px;
+            height: 120px;
             background: #ffd700;
             border-radius: 10px;
             cursor: pointer;
             transition: transform 0.2s;
         }
         .lever:hover {
-            transform: translateY(-50%) rotate(15deg);
+            transform: translateY(-50%) rotate(deg);
         }
         .lever:active {
             transform: translateY(-50%) rotate(-15deg);
@@ -81,22 +78,22 @@
         /* Animation for slot spinning */
         @keyframes spin1 {
             0% { transform: translateY(0); }
-            30% { transform: translateY(-100px); } /* Move up */
-            35% { transform: translateY(-100px); } /* Hold at the top */
-            35.0001% { transform: translateY(80px); } /* Teleport down below */
+            30% { transform: translateY(-120px); } /* Move up */
+            35% { transform: translateY(-120px); } /* Hold at the top */
+            35.0001% { transform: translateY(100px); } /* Teleport down below */
             100% { transform: translateY(0); } /* Return to original */
         }
         @keyframes spin2 {
             0% { transform: translateY(0); }
-            30% { transform: translateY(-110px); }
-            35% { transform: translateY(-110px); }
-            35.001% { transform: translateY(90px); }
+            30% { transform: translateY(-120px); }
+            35% { transform: translateY(-120px); }
+            35.001% { transform: translateY(100px); }
             100% { transform: translateY(0); }
         }
         @keyframes spin3 {
             0% { transform: translateY(0); }
             30% { transform: translateY(-120px); }
-            31% { transform: translateY(-120px); }
+            35% { transform: translateY(-120px); }
             35.001% { transform: translateY(100px); }
             100% { transform: translateY(0); }
         }
@@ -141,12 +138,15 @@
             const slot3 = document.getElementById('slot3');
             const message = document.getElementById('message');
 
-            // Apply spinning animations with different heights
-            slot1.style.animation = "spin1 5s linear infinite"; // Faster spin
-            slot2.style.animation = "spin2 5s linear infinite"; // Faster spin
-            slot3.style.animation = "spin3 5s linear infinite"; // Faster spin
+            // Apply spinning animations with different heights and shorter duration
+            slot1.style.animation = "spin1 2s linear infinite"; // Spin duration for slot1
+            slot2.style.animation = "spin2 2s linear infinite"; // Spin duration for slot2
+            slot3.style.animation = "spin3 2s linear infinite"; // Spin duration for slot3
 
-            // Stop spinning and display results after 5 seconds
+            // Total time for 7 spins
+            const totalSpinTime = 2 * 7 * 1000; // 2 seconds per spin * 7 spins
+
+            // Stop spinning and display results after the total time
             setTimeout(() => {
                 slot1.style.animation = "";
                 slot2.style.animation = "";
@@ -172,7 +172,7 @@
                 }
 
                 isSpinning = false; // Reset spinning flag
-            }, 14200); // 5 seconds delay
+            }, totalSpinTime); // Adjusted timeout duration for total spins
         }
     </script>
 </body>
